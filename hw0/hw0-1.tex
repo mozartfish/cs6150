@@ -1,0 +1,81 @@
+\documentclass[addpoints]{exam}
+\usepackage{url}
+\usepackage{amsmath,amsthm,enumitem}
+\usepackage{graphicx}
+\usepackage{algorithm, algorithmicx, algpseudocode}
+%\input myfonts
+
+\renewcommand{\gcd}{\textsc{Gcd}}
+\newtheorem*{claim}{Claim}
+
+\title{CS 6150: HW0 -- Introduction and background}
+\date{Submission date: Saturday, August 28, 2021, 11:59 PM}
+\begin{document}
+\maketitle
+\begin{center}
+\fbox{\fbox{\parbox{5.5in}{\centering
+This assignment has \numquestions\ questions, for a total of \numpoints\
+points. % and \numbonuspoints\ bonus points.  
+Unless otherwise specified, complete and reasoned arguments will be expected for all answers. }}}
+\end{center}
+
+\qformat{Question \thequestion: \thequestiontitle\dotfill \textbf{[\totalpoints]}}
+\pointname{}
+\bonuspointname{}
+\pointformat{[\bfseries\thepoints]}
+
+
+\begin{center}
+  \gradetable
+\end{center}
+\newpage
+\begin{questions}
+
+\titledquestion{Big oh and running times}
+
+\begin{parts}
+\part[4] Write down the following functions in big-oh notation:
+	\begin{enumerate}
+	\item $f(n) = n^2 + 5n + 20$.
+	\item $g(n) = \frac{1}{n^2} + \frac{2}{n}$.
+	\end{enumerate}
+\part[6] Consider the following algorithm to compute the GCD of two positive integers $a, b$. 
+Suppose $a, b$ are numbers that are both at most $n$. Give a bound on the running time of $\gcd(a, b)$. (You need to give a formal proof for your claim.)
+\begin{algorithm}[!h]
+	\caption{$\gcd(a, b)$}
+	\begin{algorithmic}
+		\State if ($a < b$) return $\gcd(b, a)$;
+		\State if ($b = 0$) return $a$;
+		\State return $\gcd(b, a\%b)$;  (Recall: $a\%b$ is the remainder when $a$ is divided by $b$)
+	\end{algorithmic}
+\end{algorithm}
+\end{parts}
+
+\titledquestion{Square vs. Multiply}[5]
+Suppose I tell you that there is an algorithm that can square any $n$ digit number in time $O(n \log n)$, for all $n\ge 1$. Then, prove that there is an algorithm that can find the product of {\em any two} $n$ digit numbers in time $O(n \log n)$.  [{\em Hint:} think of using the squaring algorithm as a subroutine to find the product.]
+
+\titledquestion{Graph basics}[8]
+Let $G$ be a {\em simple}\footnote{I.e., there are no self loops or multiple edges between any pair of vertices.} undirected graph. Prove that there are at least two vertices that have the same degree. 
+
+\titledquestion{Background: Probability}
+\begin{parts}
+\part[3] Suppose we toss a fair coin $k$ times. What is the probability that we see heads precisely once? 
+\part[4] Suppose we have $k$ different boxes, and suppose that every box is colored uniformly at random with one of $k$ colors (independently of the other boxes). What is the probability that all the boxes get distinct colors?
+\part[5] Suppose we repeatedly throw a fair die (with 6 faces). What is the expected number of throws needed to see a `1'? How many throws are needed to ensure that a `1' is seen with probability $> 99/100$?
+\end{parts}
+
+\titledquestion{Tossing coins}
+Suppose we have two coins, one of which is {\em fair} (i.e. prob[heads] = prob[tails] = $1/2$), and another of which is slightly biased. More specifically, the second coin has prob[heads] = 0.51. Suppose we toss the coins $N$ times, and let $H_1$ and $H_2$ be the number of heads observed (respectively).
+\begin{parts}
+\part[3] Intuitively, how large must $N$ be, so that we have $H_2 > H_1$ with ``reasonable certainty''?
+\\ 
+\part[2] Suppose we pick $N = 25$. What is the expected value of $H_2 - H_1$?
+\part[2] Can you use this to conclude that the probability of the event $(H_2 - H_1 \ge 1)$ is small? [It's OK if you cannot answer this part of the problem.] 
+\end{parts}
+
+
+\titledquestion{Array Sums}[8]
+Given an array $A[1 \dots n]$ of integers, find if there exist indices $i, j, k$ such that $A[i]+A[j]+A[k] = 0$.  Can you find an algorithm with running time $o(n^3)$? [NOTE: this is the little-oh notation, i.e., the algorithm should run in time $< cn^3$, for any constant $c$, as $n \rightarrow \infty$.] [{\em Hint:} aim for an algorithm with running time $O(n^2 \log n)$.]
+
+\end{questions}
+\end{document}

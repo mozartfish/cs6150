@@ -1,0 +1,14 @@
+# Fdb version 3
+["pdflatex"] 1630201626 "c:/Users/rajan/Desktop/cs6150/helloWorld.tex" "helloWorld.pdf" "helloWorld" 1630201630
+  "C:/Users/rajan/AppData/Local/MiKTeX/2.9/fonts/pk/ljfour/public/cm/dpi600/cmr10.pk" 1630201626 10764 393fa0ae3507765b4e30ae577ca57106 ""
+  "C:/Users/rajan/AppData/Local/MiKTeX/2.9/miktex/data/le/pdftex/pdflatex.fmt" 1630200662 9275504 1030215facd5c5d8bc379146134f2a9e ""
+  "C:/Users/rajan/AppData/Local/Programs/MiKTeX/tex/latex/base/article.cls" 1622623408 20144 0fe9067680219956678b52f12bdce8ee ""
+  "C:/Users/rajan/AppData/Local/Programs/MiKTeX/tex/latex/base/size10.clo" 1622623408 8448 05e1c6a8fc5db344ed9d7aeb299acbce ""
+  "C:/Users/rajan/AppData/Local/Programs/MiKTeX/tex/latex/l3backend/l3backend-pdftex.def" 1620382912 27177 c0f5f128013bde6670e188c4af243210 ""
+  "c:/Users/rajan/Desktop/cs6150/helloWorld.tex" 1629952805 107 7b3240335fe65bb56dafa9eb01aee754 ""
+  "helloWorld.aux" 1630201626 32 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "helloWorld.tex" 1629952805 107 7b3240335fe65bb56dafa9eb01aee754 ""
+  (generated)
+  "helloWorld.aux"
+  "helloWorld.log"
+  "helloWorld.pdf"

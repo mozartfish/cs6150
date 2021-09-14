@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1630202298 "c:/Users/rajan/Desktop/cs6150/hw0/hw0-1.tex" "hw0-1.pdf" "hw0-1" 1630202299
+["pdflatex"] 1630215403 "c:/Users/rajan/Desktop/cs6150/hw0/hw0-1.tex" "hw0-1.pdf" "hw0-1" 1631039245
   "C:/Users/rajan/AppData/Local/MiKTeX/2.9/miktex/data/le/pdftex/pdflatex.fmt" 1630201751 9275504 f9d7dd45f1a02a0197443089a239a4ca ""
   "C:/Users/rajan/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map" 1630201747 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
   "C:/Users/rajan/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1233955448 1004 54797486969f23fa377b128694d548df ""
@@ -57,10 +57,10 @@
   "C:/Users/rajan/AppData/Roaming/MiKTeX/2.9/fonts/tfm/public/cm/cmsy6.tfm" 1136768653 1116 933a60c408fc0a863a92debe84b2d294 ""
   "C:/Users/rajan/AppData/Roaming/MiKTeX/2.9/fonts/tfm/public/cm/cmsy8.tfm" 1136768653 1120 8b7d695260f3cff42e636090a8002094 ""
   "C:/Users/rajan/AppData/Roaming/MiKTeX/2.9/fonts/tfm/public/cm/cmti10.tfm" 1136768653 1480 aa8e34af0eb6a2941b776984cf1dfdc4 ""
-  "c:/Users/rajan/Desktop/cs6150/hw0/hw0-1.tex" 1630202297 4029 37d29b2191322840834382bfba4b0a7e ""
-  "hw0-1.aux" 1630202299 2067 4087093cc666db89f3295d676cd97340 "pdflatex"
-  "hw0-1.tex" 1630202297 4029 37d29b2191322840834382bfba4b0a7e ""
+  "c:/Users/rajan/Desktop/cs6150/hw0/hw0-1.tex" 1630215402 4058 3678ff15b4c4e215c0fad1e2d3933d89 ""
+  "hw0-1.aux" 1630215404 2067 4087093cc666db89f3295d676cd97340 "pdflatex"
+  "hw0-1.tex" 1630215402 4058 3678ff15b4c4e215c0fad1e2d3933d89 ""
   (generated)
   "hw0-1.pdf"
-  "hw0-1.aux"
   "hw0-1.log"
+  "hw0-1.aux"

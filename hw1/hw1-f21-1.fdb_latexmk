@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1631843654 "c:/Users/rajan/Desktop/cs6150/hw1/hw1-f21-1.tex" "hw1-f21-1.pdf" "hw1-f21-1" 1631843656
+["pdflatex"] 1631843654 "c:/Users/rajan/Desktop/cs6150/hw1/hw1-f21-1.tex" "hw1-f21-1.pdf" "hw1-f21-1" 1631856237
   "C:/Users/rajan/AppData/Local/MiKTeX/2.9/miktex/data/le/pdftex/pdflatex.fmt" 1630201751 9275504 f9d7dd45f1a02a0197443089a239a4ca ""
   "C:/Users/rajan/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map" 1631653033 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
   "C:/Users/rajan/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1233955448 1004 54797486969f23fa377b128694d548df ""
@@ -65,6 +65,6 @@
   "hw1-f21-1.aux" 1631843655 2659 3b00284c10b6010ce617a5fa342486b0 "pdflatex"
   "hw1-f21-1.tex" 1631843653 16304 bed8d1cff8045636d9e3b732a125f8f2 ""
   (generated)
-  "hw1-f21-1.aux"
   "hw1-f21-1.pdf"
+  "hw1-f21-1.aux"
   "hw1-f21-1.log"

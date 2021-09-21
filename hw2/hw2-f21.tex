@@ -45,8 +45,17 @@ Unless otherwise specified, complete and reasoned arguments will be expected for
 \EndFunction
 \end{algorithmic}
 
-Implement the subroutine above, and find the Fibonacci numbers for $k=45, 50, 55$. (You may need to explicitly use 64 bit integers depending on your programming language.) What do you observe as the running time?
-\part[2] Explain the behavior above, and say how you can overcome the issue. 
+Implement the subroutine above, and find the Fibonacci numbers for $k=45, 50, 55$. (You may need to explicitly use 64 bit integers depending on your programming language.) What do you observe as the running time? \\
+The running time for the recursive fibonacci function is exponential. \\
+\part[2] Explain the behavior above, and say how you can overcome the issue. \\ 
+The recursive implementation of the fibonacci sequence as given in the pseudocode above does repeated work. For example to calcualte the 6th Fibonacci number, F(6) the following information is needed: \\
+$\rightarrow F(6) = F(5) + F(4)$ \\
+$\rightarrow F(5) = F(4) + F(3)$, $F(4) = F(3) + F(2)$\\
+$\rightarrow F(3) = F(2) + F(1)$, $F(2) = F(1) + F(0)$\\
+The recurrence relation for the fibonacci sequence can be represented as $T(n) = 3 + T(n - 1) + T(n - 2)$. For very large fibonacci numbers such as $k = 45$, we end up doing double the work for a calculation. 
+To resolve this issue, we can use dynamic program and memoization where we store the result of previously computed fibonacci numbers which are needed to compute the next fibonacci number. This resolves the time taken to compute a fibonacci number
+needed to compute the next fibonacci number with a constant time look up operation which improves the overall runtime of computing fibonacci numbers. \\
+
 \part[4] Recall the $L$-hop shortest path problem we saw in class. Here, the procedure \texttt{ShortestPath(u, v, L)} involves looking up the values of \texttt{ShortestPath(u', v, L-1)} for all out-neighbors $u'$ of $u$. This takes time equal to $deg(u)$, where $deg$ defers to the out-degree. 
 
 Consider the total time needed to compute \texttt{ShortestPath(u, v, L)}, for all vertices $u$ in the graph (with $v, L$ remaining fixed, and assuming that the values of \texttt{ShortestPath(u', v, L-1)} have all been computed). Show that this total time is $O(m)$, where $m$ is the number of edges in the graph. 

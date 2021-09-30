@@ -1,5 +1,6 @@
 #include <iostream>
 #include <chrono>
+#include <unistd.h>
 
 using namespace std;
 using namespace std::chrono;
@@ -31,19 +32,26 @@ long fibonacci(long n)
 
 int main()
 {
-    long num_1 = 35;
-    long num_2 = 36;
-    long num_3 = 37;
-    auto start = high_resolution_clock::now();
+    long num_1 = 45;
+    long num_2 = 50;
+    long num_3 = 55;
+       // time stuff
+    auto start = chrono::steady_clock::now();
     // long result_1 = fibonacci(num_1);
     // long result_2 = fibonacci(num_2);
     long result_3 = fibonacci(num_3);
-    auto stop = high_resolution_clock::now();
+    auto end = chrono::steady_clock::now();
 
-    auto duration = duration_cast<microseconds>(stop - start);
 
-    cout << "Time taken by function: "
-         << duration.count() << " microseconds" << endl;
+    // auto start = high_resolution_clock::now();
+    // long result_1 = fibonacci(num_1);
+    // long result_2 = fibonacci(num_2);
+    // long result_3 = fibonacci(num_3);
+    // auto stop = high_resolution_clock::now();
+
+    cout << "Elapsed time in seconds: "
+    << chrono::duration_cast<chrono::seconds>(end - start).count()
+    << " sec" << endl;
 
     return 0;
 

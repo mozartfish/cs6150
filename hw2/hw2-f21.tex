@@ -3,6 +3,8 @@
 \usepackage{amsmath,amsthm,enumitem}
 \usepackage{graphicx}
 \usepackage{algpseudocode}
+\usepackage{algorithm}
+
 %\input myfonts
 
 \newtheorem*{claim}{Claim}
@@ -11,10 +13,10 @@
 \begin{document}
 \maketitle
 \begin{center}
-\fbox{\fbox{\parbox{5.5in}{\centering
-This assignment has \numquestions\ questions, for a total of \numpoints\
-points. % and \numbonuspoints\ bonus points.  
-Unless otherwise specified, complete and reasoned arguments will be expected for all answers. }}}
+  \fbox{\fbox{\parbox{5.5in}{\centering
+        This assignment has \numquestions\ questions, for a total of \numpoints\
+        points. % and \numbonuspoints\ bonus points.  
+        Unless otherwise specified, complete and reasoned arguments will be expected for all answers. }}}
 \end{center}
 
 \qformat{Question \thequestion: \thequestiontitle\dotfill \textbf{[\totalpoints]}}
@@ -31,67 +33,160 @@ Unless otherwise specified, complete and reasoned arguments will be expected for
 
 \begin{questions}
 
-\titledquestion{Basics -- recursion and dynamic programming}
-\begin{parts}
-\part[4] Consider the following recursive subroutine for computing the $k$th Fibonacci number: 
+  \titledquestion{Basics -- recursion and dynamic programming}
+  \begin{parts}
+    \part[4] Consider the following recursive subroutine for computing the $k$th Fibonacci number:
 
-\begin{algorithmic}
-\Function{Fibonacci}{$k$}:
-\If{$k = 0$ or $k=1$}
-\State \Return 1
-\Else 
-\State \Return Fibonacci($k-1$) + Fibonacci($k-2$)
-\EndIf
-\EndFunction
-\end{algorithmic}
+    \begin{algorithm}
+      \begin{algorithmic}
+        \Function{Fibonacci}{$k$}:
+        \If{$k = 0$ or $k=1$}
+        \State \Return 1
+        \Else
+        \State \Return Fibonacci($k-1$) + Fibonacci($k-2$)
+        \EndIf
+        \EndFunction
+      \end{algorithmic}
+    \end{algorithm}
+    Implement the subroutine above, and find the Fibonacci numbers for $k=45, 50, 55$. (You may need to explicitly use 64 bit integers depending on your programming language.) What do you observe as the running time? \\
+    The running time was calculated for the following Fibonacci numbers using C++ and the Chronos timing library: \\
+    $\rightarrow F(45) = 5$ seconds \\
+    $\rightarrow F(50) = 62$ seconds \\
+    $\rightarrow F(55) = 697$ seconds \\
+    Based on the behavior of the runtimes for these values, we can see that the recursive implementation of fibonacci using the above algorithm produces an exponential running time. \\
+    \part[2] Explain the behavior above, and say how you can overcome the issue. \\
+    The recursive implementation of the fibonacci sequence as given in the pseudocode above does repeated work. For example to calcualte the 6th Fibonacci number, F(6) the following information is needed: \\
+    $\rightarrow F(6) = F(5) + F(4)$ \\
+    $\rightarrow F(5) = F(4) + F(3)$, $F(4) = F(3) + F(2)$\\
+    $\rightarrow F(3) = F(2) + F(1)$, $F(2) = F(1) + F(0)$\\
+    The recurrence relation for the fibonacci sequence can be represented as $T(n) = 3 + T(n - 1) + T(n - 2)$. For very large fibonacci numbers such as $k = 45$, we end up doing double the work for a calculation.
+    To resolve this issue, we can use dynamic program and memoization where we store the result of previously computed fibonacci numbers which are needed to compute the next fibonacci number. Memoization helps avoid traveling down the entire
+    subtree for a value that is needed to computed the $N^{th}$ fibonacci number. The result is that for each previous fibonacci number we get $2n$ pairs. Assuming a find operation for the memo table is constant time, then the recurrence relation for the
+    memoized fibonacci is $T(n) = O(n + 1)$ which simplifies to a runtime of $O(n)$ where n refers to the total number of values needed to produced the $n^{th}$ fibonacci number. \\
 
-Implement the subroutine above, and find the Fibonacci numbers for $k=45, 50, 55$. (You may need to explicitly use 64 bit integers depending on your programming language.) What do you observe as the running time? \\
-The running time for the recursive fibonacci function is exponential. \\
-\part[2] Explain the behavior above, and say how you can overcome the issue. \\ 
-The recursive implementation of the fibonacci sequence as given in the pseudocode above does repeated work. For example to calcualte the 6th Fibonacci number, F(6) the following information is needed: \\
-$\rightarrow F(6) = F(5) + F(4)$ \\
-$\rightarrow F(5) = F(4) + F(3)$, $F(4) = F(3) + F(2)$\\
-$\rightarrow F(3) = F(2) + F(1)$, $F(2) = F(1) + F(0)$\\
-The recurrence relation for the fibonacci sequence can be represented as $T(n) = 3 + T(n - 1) + T(n - 2)$. For very large fibonacci numbers such as $k = 45$, we end up doing double the work for a calculation. 
-To resolve this issue, we can use dynamic program and memoization where we store the result of previously computed fibonacci numbers which are needed to compute the next fibonacci number. This resolves the time taken to compute a fibonacci number
-needed to compute the next fibonacci number with a constant time look up operation which improves the overall runtime of computing fibonacci numbers. \\
+    \part[4] Recall the $L$-hop shortest path problem we saw in class. Here, the procedure \texttt{ShortestPath(u, v, L)} involves looking up the values of \texttt{ShortestPath(u', v, L-1)} for all out-neighbors $u'$ of $u$. This takes time equal to $deg(u)$, where $deg$ defers to the out-degree.
 
-\part[4] Recall the $L$-hop shortest path problem we saw in class. Here, the procedure \texttt{ShortestPath(u, v, L)} involves looking up the values of \texttt{ShortestPath(u', v, L-1)} for all out-neighbors $u'$ of $u$. This takes time equal to $deg(u)$, where $deg$ defers to the out-degree. 
+    Consider the total time needed to compute \texttt{ShortestPath(u, v, L)}, for all vertices $u$ in the graph (with $v, L$ remaining fixed, and assuming that the values of \texttt{ShortestPath(u', v, L-1)} have all been computed). Show that this total time is $O(m)$, where $m$ is the number of edges in the graph. \\
+    Based on the problem statement, we can say the following things about the graph:
+    \begin{enumerate}
+      \item The sum of all the out-degrees for the graph is equal to $m$ where $m$ represents the number of edges in the graph
+      \item The number of out degrees for a node $n$ can be represented as $1 \leq p \leq m$ where $p$ is the number of outdegrees that is at least 1 and at most $m$ where $m$ represents the total number of edges in the graph.
+    \end{enumerate}
+    For every node $u$ in the graph, we look up the shortest path in the cache for all out neighbors $u'$ which can take up $O(m)$ if $u$ has
+    an edge to every other node in the graph. Thus if we assume every node in the graph is connected and the number of nodes $u \leq m$ where $m$ represents the total number of edges in the graph,
+    then we can say that the overall running time is $O(m)$.
 
-Consider the total time needed to compute \texttt{ShortestPath(u, v, L)}, for all vertices $u$ in the graph (with $v, L$ remaining fixed, and assuming that the values of \texttt{ShortestPath(u', v, L-1)} have all been computed). Show that this total time is $O(m)$, where $m$ is the number of edges in the graph. 
-\end{parts}
+  \end{parts}
 
-\titledquestion{Linear time selection}
-Recall the linear time selection algorithm we saw in class (median-of-medians, lectures 4 and 5) and answer the following questions. {\underline{Please provide detailed justification}}.
-\begin{parts}
-\part[5] Instead of dividing the array into groups of $5$, suppose we divided the array into groups of $3$. Now sorting each group is faster (although both are constant time). But what would be the recurrence we obtain? Is this an improvement over the original algorithm? [{\em Hint:} What would the size of the sub-problems now be?]
-\part[5] The linear time selection algorithm has some non-obvious applications. Consider the following problem. Suppose we are given an array of $n$ integers $A$, and you are {\em told} that there exists some element $x$ that appears at least $n/5$ times in the array. Describe and analyze an $O(n)$ time algorithm to find such an $x$. (If there are multiple such $x$, returning any one is OK.)  [{\em Hint:} Think of a way of using the selection algorithm! I.e., try finding the $k$th smallest element of the array for a few different values of $k$.]
-\end{parts}
+  \titledquestion{Linear time selection}
+  Recall the linear time selection algorithm we saw in class (median-of-medians, lectures 4 and 5) and answer the following questions. {\underline{Please provide detailed justification}}.
+  \begin{parts}
+    \part[5] Instead of dividing the array into groups of $5$, suppose we divided the array into groups of $3$. Now sorting each group is faster (although both are constant time). But what would be the recurrence we obtain? Is this an improvement over the original algorithm? [{\em Hint:} What would the size of the sub-problems now be?] \\
+    In this problem we partition the array A into $n/3$ subarrays of size 3 ie. the first 3 elements, next 3 elements etc.
+    Next, the suba-arrays are sorted according to the Blum et. al procedure and since they are of constant size, the standard procedure is constant time per sub-array.
+    Then, let $B[0], B[1], B[n/3 - 1]$ be the array in which B[i] is the middle element, which int this problem is the second element of the ith sub-array.
+    Then we we return the median which would be the n/6 th smallest element of B[]. Modifying the Blum Proof slightly, we can that there are n/6 elements of B[] that are $\leq x$, where $x$ is the approximate median we are looking for.
+    The elements of B[i] are the 2nd smallest elements of some sub-array in A[]. Thus we have at least $\frac{2n}{6}$ elements of A[] are $\leq x$ and we can also argue that there are at least $\frac{2n}{6}$ that are $\geq x$. Then since $\frac{2n}{6} < \frac{n}{4}$ if $x$
+    is the rth smallest element of A[], then $\frac{n}{4} \leq r \leq \frac{3n}{4}$. The recurrence would be modified to be $T(n) \leq T(\frac{3n}{4}) + T(n/3) + cn$
+    This would be an improvement of the algorithm because we are subdividing the array into chunks of size $n/3$. 
+      \part[5] The linear time selection algorithm has some non-obvious applications. Consider the following problem. Suppose we are given an array of $n$ integers $A$, and you are {\em told} that there exists some element $x$ that appears at least $n/5$ times in the array. Describe and analyze an $O(n)$ time algorithm to find such an $x$. (If there are multiple such $x$, returning any one is OK.)  [{\em Hint:} Think of a way of using the selection algorithm! I.e., try finding the $k$th smallest element of the array for a few different values of $k$.]
+  \end{parts}
 
-\titledquestion{Coin change revisited}
-Recall the ``coin change'' problem, where we have coins of denominations $d_1, d_2, \dots, d_k$ (an unlimited supply of each), and the goal is to make change for $N$ cents using the minimum {\em number} of coins (here $N, d_1, \dots, d_k$ are given positive integers). 
+  \titledquestion{Coin change revisited}
+  Recall the ``coin change'' problem, where we have coins of denominations $d_1, d_2, \dots, d_k$ (an unlimited supply of each), and the goal is to make change for $N$ cents using the minimum {\em number} of coins (here $N, d_1, \dots, d_k$ are given positive integers).
 
-We saw in class that a greedy strategy does not work, and we needed to use dynamic programming.
-\begin{parts}
-\part[4] We discussed a dynamic programming algorithm that uses space $O(N)$ and computes the minimum number of coins needed. Give an algorithm that improves the space needed to $O(\max_i (d_i))$. 
-\part[6] Design an algorithm that outputs the number of different ways in which change can be obtained for $N$ cents using the given coins. (Two ways are considered different if they differ in the number of coins used of at least one type.) Your algorithm needs to have time and space complexity polynomial in $N, k$.
-\end{parts}
+  We saw in class that a greedy strategy does not work, and we needed to use dynamic programming.
+  \begin{parts}
+    \part[4] We discussed a dynamic programming algorithm that uses space $O(N)$ and computes the minimum number of coins needed. Give an algorithm that improves the space needed to $O(\max_i (d_i))$. \\
+    \textbf{Algorithm} 
+    \begin{algorithm}
+      \caption{Min Change}
+      \begin{algorithmic}[1]
+        \Function{Min Change}{$Coins[]$, $Amount$}:
+        \Require $Coins[d_1, d_2, d_3, ... d_i]$ where each $d_i$ corresponds to a coin
+        denomination and the list of coins is in ascending order. Amount is a non-negative value
+        \State $maxDenom\gets max(Coins)$
+        \State $table[]\gets$ new array of size max coin denomination
+        \State $table[0] = 0$
+        \For{\texttt{i = 1 to Amount(inclusive)}}
+        \State minDenom = Amount + 1
+
+        \For{\texttt{coin in Coins}}
+        \State Change = i - coin \Comment coin represents coin value
+        \If {Change $<$ 0}
+        \State $continue$
+        \Else
+        \State minDenom = min(minDenom, $table[Change\mod{maxDenom}]$ + 1)
+        \EndIf
+        \EndFor
+        \State table[$i\mod maxDenom$] = minDenom
+        \EndFor \\
+        \Return $table[maxDenom - 1]$
+        \EndFunction
+      \end{algorithmic}
+    \end{algorithm}
+    \textbf{Correctness}\\
+    For this problem, we define a fixed size for the tabulation array such that the storage for the table is  $max(Coins[d_1, d_2, ... d_n])$. Then since we we only have a 
+    fixed size which cannot store the results, once we reach the limits of the array capacity we can start to override the value in the current index because each subproblem who value is stored 
+    is based upon the previous value that was computed. To compute this new index we use the modulo which handles the wrap-around.
+    \textbf{Runtime} \\
+    The space time complexity as proven above in the correctness section is $O(max_i(d_i))$
+    \part[6] Design an algorithm that outputs the number of different ways in which change can be obtained for $N$ cents using the given coins. (Two ways are considered different if they differ in the number of coins used of at least one type.) Your algorithm needs to have time and space complexity polynomial in $N, k$. \\
+    % \textbf{Algorithm} \\
+    % \begin{algorithm}
+    %   \caption{Unique Ways to Make Change}
+    %   \begin{algorithmic}[2]
+    %     \Function{Unique Change}{$Coins[]$, $Amount$}
+    %     \Require $Coins[d_1, d_2, d_3, ... d_i]$ where each $d_i$ corresponds to a coin
+    %     denomination and the list of coins is in ascending order. Amount is a non-negative values.
+    %     \State $k\gets Size(Coins)$\Comment where Size(Coins) returns the number of unique denominations
+    %     \State $N\gets Amount$\Comment where N represents a particular denomination
+    %     \State $table = [k + 1][N + 1]$\Comment create a memo table to store the unique ways to produce particular denomination
+    %     \For{\texttt{i = 1 to N(inclusive)}}
+    %     table[0][i] = 0\Comment No amount can be made with no coins except for amount of 0
+    %     \EndFor
+    %     \For{\texttt{j = 0 to k(inclusive))}}
+    %     \State table[j][0] = 1\Comment There is only 1 way to make a denomination of 0 using all the different coin denominations
+    %     \EndFor
+    %     \For{\texttt{i = 1 to k(inclusive)}}
+    %     \For{\texttt{{j = 1 to N(inclusive)}}}
+    %       \If $j \geq Coins[i - 1]$
+    %     table[i][j] = table[i][j - Coins[i - 1]] + table[i - 1][j] \Comment Include denomination \\
+    %     \Else
+    %     table[i][j] = table[i - 1][j] \Comment Exclude denomination
+    %     \EndIf
+    %     \EndFor
+    %     \EndFor
+    %     \Return table[k][Amount]
+    %     \EndFunction
+    %   \end{algorithmic}
+    % \end{algorithm}
+    % \textbf{Correctness} \\
+
+    % \textbf{Runtime} \\
+    % The runtime for this algorithm is $O(Nk)$ because we have to check every value in the memo table which we have represented as a matrix.
+    % Thus the since we constructed a memo table of $N * k$ dimensions, the runtime will be the product.
+  \end{parts}
 
 
-\titledquestion{Let them eat cake}[10]
-Alice buys a cake with $k$ slices on day 1. Each day, she can eat some of the slices, and save the rest for later. If she eats $j$ slices on some day, she receives a ``satisfaction'' value of $\sqrt{j}$. However, a cake loses freshness over time, and so suppose that each passing day results in a loss of value by a factor $\beta = 0.8$. Thus if she eats $j$ slices on day $t$, she receives a satisfaction of $\beta^{t-1} \sqrt{j}$ on that day.
+  \titledquestion{Let them eat cake}[10]
+  Alice buys a cake with $k$ slices on day 1. Each day, she can eat some of the slices, and save the rest for later. If she eats $j$ slices on some day, she receives a ``satisfaction'' value of $\sqrt{j}$. However, a cake loses freshness over time, and so suppose that each passing day results in a loss of value by a factor $\beta = 0.8$. Thus if she eats $j$ slices on day $t$, she receives a satisfaction of $\beta^{t-1} \sqrt{j}$ on that day.
 
-Given that Alice has $k$ slices at the start of day 1, given the decay parameter $\beta = 0.8$, and assuming that she only eats an integer number of slices each day, give an algorithm that finds the optimal ``schedule'' (i.e., how many slices to eat on days $1, 2, 3, \dots$). The algorithm must have running time polynomial in $k$.   [{\em Hint: } dynamic programming!]
+  Given that Alice has $k$ slices at the start of day 1, given the decay parameter $\beta = 0.8$, and assuming that she only eats an integer number of slices each day, give an algorithm that finds the optimal ``schedule'' (i.e., how many slices to eat on days $1, 2, 3, \dots$). The algorithm must have running time polynomial in $k$.   [{\em Hint: } dynamic programming!]
 
-\titledquestion{Conflict-free subsets}
-Suppose we have $n$ people, of which we want to pick a subset to form a team. Every person has a (non-negative) ``value'' they can bring to the team, and the value of a subset is simply the sum of values of those in the subset. To complicate matters however, some people do not get along with some others, and two people who don't get along cannot {\em both} be part of the chosen team.
+  \titledquestion{Conflict-free subsets}
+  Suppose we have $n$ people, of which we want to pick a subset to form a team. Every person has a (non-negative) ``value'' they can bring to the team, and the value of a subset is simply the sum of values of those in the subset. To complicate matters however, some people do not get along with some others, and two people who don't get along cannot {\em both} be part of the chosen team.
 
-Suppose that conflicts are represented as an undirected graph $G$ whose vertex set is the $n$ people, and an edge $ij$ represents that $i$ and $j$ do not get along. The goal is now to choose a subset of the people that maximizes the total value, subject to avoiding conflicts (as described above).
+  Suppose that conflicts are represented as an undirected graph $G$ whose vertex set is the $n$ people, and an edge $ij$ represents that $i$ and $j$ do not get along. The goal is now to choose a subset of the people that maximizes the total value, subject to avoiding conflicts (as described above).
 
-\begin{parts}
-\part[3] Consider the following natural algorithm: choose the person who brings the highest value, remove everyone who is conflicted, choose the one remaining with the highest value, remove those conflicted, and so on. Does this algorithm always find the optimal subset (one with the highest total value)? If so, provide formal reasoning, and if not, provide a counter-example.
-\part[7] Suppose the graph $G$ of conflicts is a (rooted) tree (i.e., a connected graph with no cycles). Give an algorithm that finds the optimal subset. (If there are many such sets, finding one suffices.) The algorithm should run in time polynomial in $n$.  [{\em Hint: } Once again, think of a recursive formulation given the rooted tree structure and use dynamic programming!]
-\end{parts}
+  \begin{parts}
+    \part[3] Consider the following natural algorithm: choose the person who brings the highest value, remove everyone who is conflicted, choose the one remaining with the highest value, remove those conflicted, and so on. Does this algorithm always find the optimal subset (one with the highest total value)? If so, provide formal reasoning, and if not, provide a counter-example. \\
+    \textbf{Counter Example}: \\
+    If we have a group of $n$ people where everyone except for 1 person get along with one another. The person who does not get along with everyone has the highest value forms their own team call this $Team$ $A$,
+    and the remaining people form a team together and call this $Team$ $B$. If the sum of the $Team$ $B$'s values is greater than the total value of $Team$ $A$, then we have found a counter-example, for the algorithm always finding the optimal solution. \\
+
+    \part[7] Suppose the graph $G$ of conflicts is a (rooted) tree (i.e., a connected graph with no cycles). Give an algorithm that finds the optimal subset. (If there are many such sets, finding one suffices.) The algorithm should run in time polynomial in $n$.  [{\em Hint: } Once again, think of a recursive formulation given the rooted tree structure and use dynamic programming!]
+  \end{parts}
 
 \end{questions}
 \end{document}

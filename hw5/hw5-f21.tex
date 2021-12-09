@@ -1,12 +1,15 @@
 \documentclass[addpoints, 11pt]{exam}
 \usepackage{url}
 \usepackage{amsmath,amsthm,enumitem,amssymb}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
 \usepackage{graphicx}
 %\input myfonts
 
 \newtheorem*{claim}{Claim}
 \title{CS 6150: HW5 -- Randomized algorithms, optimization}
-\date{Submission date: Monday, Nov 29, 2021 (11:59 PM)}
+\date{Submission date: Monday, Nov 29, 2021 (11:59 PM) \\ 
+Collaborators: Andrew Golightly, Thomas Burr, Taylor Allred, Alex Carpenteri, Brian Schnepp, Trey Lavery, Frost Office Hours, Yo Office Hours}
 \begin{document}
 \maketitle
 \begin{center}
@@ -43,7 +46,7 @@
     \part[4] What is the size of the sample you need for the probability above to become 0.9? (Your answer can be within 20\% of the `best' value.) \\
     Sample size needed to achieve a probability of $0.9$ with $100$ trials: 900 elements
     \part[4] Suppose the population is more biased ---55\% of them vote for $A$ and 45\% of them vote for $B$--- and re-solve part (b). \\
-    Sample size needed to achieve a probability of $0.9$ with $100$ trials: 900 elements \\
+    Sample size needed to achieve a probability of $0.9$ with $100$ trials: 175 elements \\
     $Note$: This code was written with python and uses python's random number generator with randint(). According to the docs https://docs.python.org/3/library/random.html
     Python uses the Mersenne twister to generate random numbers so if a particular experiment is run enough times a specified target probability can be achieved.
   \end{parts}
@@ -54,13 +57,27 @@
   Suppose we have $n$ elements, labeled $1, 2, \dots, n$. Our goal is to find an ordering of these elements that satisfies as many ``constraints'' as possible, of the kind described below. We are given $m$ constraints, where each constraint is given by a triple $(a, b, c)$, where $a, b, c \in \{1, 2, \dots, n\}$. The constraint is said to be {\em satisfied} if in the ordering we output, $a$ does {\bf not} lie ``between'' $b$ and $c$ (but the order between $b$ and $c$ doesn't matter).  For example, if $n=4$ and we consider the ordering $2 4 3 1$, then the constraint $(1, 4, 3)$ is satisfied, but $(3, 1, 2)$ is not.
 
   Given the constraints, the goal is to find an ordering that satisfies as many constraints as possible (for simplicity, assume in what follows that {\bf $m$ is a multiple of $3$}). For large $m, n$, this problem becomes very difficult.
-
   \begin{parts}
-    \part[6] As a baseline, let us consider a {\em uniformly random} ordering. What is the expected number of constraints that are satisfied by this ordering?  [{\em Hint: } define appropriate random variables whose sum is the quantity of interest, and apply the linearity of expectation.]
+    \part[6] As a baseline, let us consider a {\em uniformly random} ordering. What is the expected number of constraints that are satisfied by this ordering?  [{\em Hint: } define appropriate random variables whose sum is the quantity of interest, and apply the linearity of expectation.] \\
+
+    Let us consider two values for elements $n$ where $n=3$ and $n=4$. These represent the set of elements to be chosen for a triplet. For a triplet, we want a unique ordering of the digits
+    so to calculate this we consider the permutation $_{n}P_{3}$. This yields the total number of constraints $m$ which for $n=3$ is $6$ and for $n=4$ is $24$. Through trial and error for writing out the pattern for $n=4$ $n=5$, $n=6$,
+    $\frac{2}{3}$ of the constraints are valid and $\frac{1}{3}$ are invalid. For the ordering of $(a, b, c)$ there are $6$ different ways of arranging $(a, b, c)$. Since we are only selecting $3$ values for a triplet,
+    we will always get $\frac{2}{3}$ of the constraints are valid regardless of what value of $n$ is chosen.
+
     \part[4] Let $X$ be the random variable which is the number of constraints satisfied by a random ordering, and let $E$ denote its expectation (which we computed in part (a)). Now, Markov's inequality tells us, for example, that $\Pr[ X \ge 2E ] \le 1/2$. But it does not directly imply that $\Pr[ X \ge E ]$  is ``large enough'' (which we need if we want to say that generating a few random orderings and picking the best one leads to many constraints being satisfied with high probability).
     Use the definition of $X$ above to conclude that $\Pr[ X \ge E ] \ge 1/m$.
 
-      [{\em Hint:} $X$ is a non-negative integer!]
+      [{\em Hint:} $X$ is a non-negative integer!] \\
+
+    Let $m$ represent the number of total constraints
+
+    $\rightarrow E[x] = \int_{0}^{\infty}x \cdot f(x) = \int_{0}^{kE} x \cdot f(x)dx + \int_{kE}^{\infty}x \cdot f(x)dx$ \\
+    $\rightarrow E[x] = \sum_{i = 0}^{E - 1} i \cdot Pr[X = i] + \sum_{i=E}^{m}i \cdot Pr[X = i]$ \\
+    $\rightarrow 1 \leq \sum_{i = E}^{m} i \cdot Pr[X=i] \leq m \cdot Pr[X \geq E]$ \\
+    $\rightarrow \frac{1}{m} \leq Pr[x \geq E]$
+
+    % For this part 
   \end{parts}
 
   \titledquestion{Writing constraints}[6]
@@ -75,7 +92,10 @@
   \end{align*}
   (Intuitively, the constraints say that exactly one incoming edge and one outgoing edge must be chosen --- as in a directed cycle.) Does an optimal solution to this optimization problem {\em always yield} an optimal solution to TSP? Provide a proof or a counterexample with a full explanation.
 
-    [{\em Hint:} consider a feasible solution to the optimization problem and focus on the edges with $x_{uv}=1$. Do they have to form a {\em single} cycle?]
+    [{\em Hint:} consider a feasible solution to the optimization problem and focus on the edges with $x_{uv}=1$. Do they have to form a {\em single} cycle?] \\
+
+  The constraints given in the problem allow for multiple cycles that can be disconnected because there has to be an incoming edge and outgoing edge for a node in the graph.
+  Thus this Linear Program does not yield an optimal solution to the Traveling Salesman Problem because the TSP requires a single cycle.
 
   \titledquestion{LP Basics}
   Consider the following two-variable linear program. The variables are $x, y \in \mathbb{R}$. And the constraints are:
@@ -97,23 +117,33 @@
     $3)$ $y \ge -1$ \\
     $4)$ $x + 3y \le 8$ \\
 
-    Operation 1: Multiply Equations $3$ by 2\\
-    $1)$ $2x + y \le 10$ \\
-    $2)$ $x \ge 0$ \\
-    $3)$ $2y \ge -2$ \\
-    $4)$ $x + 3y \le 8$ \\
+    We can ignore equations $2)$ $3)$ because they will not be affecting the bound.
 
-    Operation 2: Subtract equation $2$ from equation $1$: \\
-    $1)$ $ x + y \le 10$ \\
-    $3)$ $2y \ge -2$ \\
-    $4)$ $x + 3y \le 8$ \\
+    Operation 1: Multiply Equation $1$ by 2 \\
+    $1) \rightarrow 4x + 2y \leq 20$
+    $2) x + 3y \leq 8$ \\
 
-    Operation 3: Add equations $1$ and $3$: \\
-    $1)$ $ x + 3y \le 8$ \\
-    $4)$ $x + 3y \le 8$ \\
+    Operation 2: Add Equations $1$ and equation $2$ \\
+    $5x + 5y \leq 28$ \\
+    $x + y \leq \frac{28}{5}$
 
-    At this point we have shown that equations 1 and equations 4 are equivalent using a set of equation operations.
-    The bound for this set of linear equations is equation $4$.
+    In the above operations, we have shown a bound according to the format in the problem $x + y \leq C$.
+    Thus to achieve the maximum from part b, we can use the following equation $x + y \leq\frac{28}{5}$
+
+    % Operation 1: Multiply Equations $3$ by 2\\
+    % $1)$ $2x + y \le 10$ \\
+    % $2)$ $x \ge 0$ \\
+    % $3)$ $2y \ge -2$ \\
+    % $4)$ $x + 3y \le 8$ \\
+
+    % Operation 2: Subtract equation $2$ from equation $1$: \\
+    % $1)$ $ x + y \le 10$ \\
+    % $3)$ $2y \ge -2$ \\
+    % $4)$ $x + 3y \le 8$ \\
+
+    % Operation 3: Add equations $1$ and $3$: \\
+    % $1)$ $ x + 3y \le 8$ \\
+    % $4)$ $x + 3y \le 8$ \\
   \end{parts}
 
   \titledquestion{Identifying Corners}[6]
@@ -122,11 +152,46 @@
     0 \le x_i \le 1 \text{ for all $i$}, \\
     x_1 + x_2 + \dots + x_n \le k,
   \end{align*}
-  where $k$ is some integer between $1$ and $n$. Consider any point $(a_1, a_2, \dots, a_n)$ where $a_i \in \{0,1\}$, and exactly $k$ of the $\{a_i\}$ are $1$. Prove that any such point is (a) a feasible point for the LP, and (b) a corner point of the polytope defining the feasible set.
+  where $k$ is some integer between $1$ and $n$. Consider any point $(a_1, a_2, \dots, a_n)$ where $a_i \in \{0,1\}$, and exactly $k$ of the $\{a_i\}$ are $1$. Prove that any such point is (a) a feasible point for the LP, and (b) a corner point of the polytope defining the feasible set. \\
+  $\textbf{Part A}$ \\
+  In order for $a$ be a feasible point, both constraints $1)$ and $2)$ have to be satisfied. According to the definition in the problem, there are only $k$ components of $a$ that are $1$ and the rest of the components of $a$ are $0$.
+  Let the first $k$ components of $a$ be 1 and the rest of the components $a_i$ be 0. Then $\sum_{i=0}^{n}a_i = \sum_{i=0}^{k}1 + \sum_{k + 1}^{n} 0 = k$. This satisfies constraint $2)$ from the problem statement.
+  By proving constraint $2)$ we have satisfied constraint $1)$ in the process, thus satisfying both constraints $1)$ and $2)$, showing that any point $a$ is a feasible point for the LP. \\
 
-    [{\em Hint:} To prove that a point is a corner point, we use the definition we mentioned in class: a feasible point $x$ is a corner point if and only if for {\em all} nonzero vectors $z$, either $x + z$ or $x-z$ is infeasible.]
+  $\textbf{Part B}$ \\
+  Consider a point $a$ where each $a_i$ is within the domain of $\in{0, 1}$. According to the definition of $a$, $a_i$ can take on either a value
+  of $0$ or $1$. Consider a non-zero vector $z$ where each element in the vector $z_i$ can take on three different values: negative, zero or positive. \\
 
-    [{\em Remark:} It turns out that these are the only corner points of the polytope, and so it is an example of a polytope defined by $2n+1$ constraints and having $\binom{n}{k}$ corner points.]
+  Now consider the following cases where we attempt to add values of $a_i$ and $z_i$ according to the rules of vector addition and subtraction. \\
+  Case 1: $a_i = 0$ $z_i = -1$ \\
+  If we add two vectors $a$ and $z$, $a + z$ where some element $a_i$ and $z_i$ are $0$ and $-1$ respectively the resultant vector violates the first constraint
+  thus showing that the resultant vector is a corner point because the result $-1$ is outside the domain of $\in 0, 1$. \\
+
+  Case 2: $a_i = 0$ $z_i = 1$ \\
+  If we subtract vectors $a$ and $z$, $a - z$ where some element $a_i$ and $z_i$ are $0$ and $1$ respectively the resultant vector violates the first constraint
+  thus showing that the resultant vector is a corner point because the result $-1$ is outside the domain of $\in 0, 1$. \\
+
+  Case 3: $a_i = 1$ $z_i = -1$ \\
+  If we subtract vectors $a$ and $z$, $z - a$ where some element $a_i$ and $z_i$ are $1$ and $-1$ respectively the resultant vector violates the first constraint
+  thus showing that the resultant vector is a corner point because the result $-2$ is outside the domain of $\in 0, 1$. \\
+
+  Case 4: $a_i = 1$ $z_i = 1$ \\
+  If we subtract vectors $a$ and $z$, $a + z$ where some element $a_i$ and $z_i$ are $1$ and $1$ respectively the resultant vector violates the first constraint
+  thus showing that the resultant vector is a corner point because the result $2$ is outside the domain of $\in 0, 1$. \\
+
+  Case 5: $a_i = 0$ $z_i = -1$\\
+  If we subtract vectors $a$ and $z$, $a - z$ where some element $a_i$ and $z_i$ are $0$ and $ -1$ respectively, then the resultant vector violates the second constraint because
+  we have added a new $1$ component to the vector result which in turn produces a sum $> k$ where there are exactly $k$ $a_i$ elements that are $1$.\\
+
+  Case 6: $a_i = 0$ $z_i = 1$ \\
+  If we subtract vectors $a$ and $z$, $a + z$ where some element $a_i$ and $z_i$ are $0$ and $1$ respectively, then the resultant vector violates the second constraint because
+  we have added a new $1$ component to the vector result which in turn produces a sum $ > k$ where there are exactly $k$ $a_i$ elements that are $1$.\\
+
+  Thus we have shown in the above cases that for any nonzero vector $z$ $a$ is a corner point. \\
+
+  [{\em Hint:} To prove that a point is a corner point, we use the definition we mentioned in class: a feasible point $x$ is a corner point if and only if for {\em all} nonzero vectors $z$, either $x + z$ or $x-z$ is infeasible.]
+
+  [{\em Remark:} It turns out that these are the only corner points of the polytope, and so it is an example of a polytope defined by $2n+1$ constraints and having $\binom{n}{k}$ corner points.]
 
   \titledquestion{Checking feasibility vs optimization}[6]
   Some of the algorithms for linear programming (e.g. simplex) start off with one of the corner points of the feasible set.  This turns out to be tricky in general. In this problem, we will see that {\bf in general}, finding one feasible point is as difficult as actually performing the optimization!
@@ -139,7 +204,37 @@
                      & \cdots                    \\
     a_m^T x          & \ge b_m.
   \end{align*}
-  Suppose you know that the optimum value (i.e. the minimum of $c^T x$ over the feasible set) lies in the interval $[-M, M]$ for some real number $M$ (this is typically possible in practice).  Suppose also that you have an {\bf oracle} that can take any linear program and say whether it is feasible or not.  Prove that using $O(\log (M/\epsilon))$ calls to the oracle, one can determine the optimum value of the LP above up to an error of $\pm \epsilon$, for any given accuracy $\epsilon > 0$.  [\emph{Hint: } can you write a new LP that is feasible only if the LP above has optimum value $\le z$, for some $z$?]
+  Suppose you know that the optimum value (i.e. the minimum of $c^T x$ over the feasible set) lies in the interval $[-M, M]$ for some real number $M$ (this is typically possible in practice).  Suppose also that you have an {\bf oracle} that can take any linear program and say whether it is feasible or not.  Prove that using $O(\log (M/\epsilon))$ calls to the oracle, one can determine the optimum value of the LP above up to an error of $\pm \epsilon$, for any given accuracy $\epsilon > 0$.  [\emph{Hint: } can you write a new LP that is feasible only if the LP above has optimum value $\le z$, for some $z$?] \\
+  Since $\pm \epsilon$ is the error tolerance, we can add the total $\epsilon$ for the bound to be $2\epsilon$. Then we can use a variation of binary search to find a linear program
+  that satisfies the requirements of the constraints.
+
+  \begin{algorithm}
+    \caption{Linear Programming Binary Search }
+    \hspace*{\algorithmicindent} \textbf{Input}: Constraints C, optimum value $c^{T}x, \epsilon$, interval $[-M, M]$\\
+    \hspace*{\algorithmicindent} \textbf{Output}: Some minmum optimum value that $Z$ that satisfies the constraints $C$
+    \begin{algorithmic}[1]
+      \State lo = -M, hi = M
+      \While {$hi - lo > 2\epsilon$}
+      \State z = (hi - lo) / 2
+      \State Use oracle to check if $z$ is feasible. If all constraints satisfied - LP solution, otherwise not an LP solution
+      \If {z is a LP Solution}
+      hi = z
+      \Else \\
+      lo = z
+      \EndIf
+      \EndWhile \\
+      \Return z = (lo + hi) / 2 - z is calculated using the midpoint formula for the upper and lower bounds
+    \end{algorithmic}
+  \end{algorithm}
+
+  $\textbf{Proof of Correctness}$ \\
+  This algorithm is a variation of the binary search algorithm. We define the lower interval bound as $-M$ and
+  the upper interval bound as $M$. The stopping condition for this algorithm is when the difference between $hi$ and $lo$ is greater than $2\epsilon$
+  since $\epsilon$ represents the tolerance range between for a $z$ value beween the $hi$ and the $lo$ bounds. We use the oracle as stated in the problem
+  to determine whether some linear program $z$ satisfies the constraints C defined in the problem. When we call the oracle over the sample space we are looking 
+  over a boundary of small slices of $\epsilon$ which yields $\frac{1}{\epsilon}$ in the overall runtime when we have to check over the interval range with binary search. 
+  $\textbf{Runtime}$ \\
+  The runtime of the algorithm as given in the problem is $O(\log \frac{M}{\epsilon})$
 
 \end{questions}
 \end{document}
